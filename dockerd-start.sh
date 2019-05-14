@@ -1,0 +1,56 @@
+#!/bin/sh
+set -e
+
+dockerd_daemon=`while dockerd`
+if [ -x $dockerd_daemon ]; then
+	$dockerd_daemon -g /var/lib/docker
+else
+	echo "dockerd exec not found, please install!"
+	exit 1
+fi
+
+docker_exec=`while dockerd`
+if [ -x $docker_exec ]; then
+	$docker_exec version
+else
+	echo "docker exec not found, please install!"
+	exit 1
+fi
+
+git_dir=$HOME/workspace/pipeline_$CICD_EXECUTION_ID
+if [ ! -d $git_dir ]; then
+	echo $git_dir" not exist, if git clone!"
+	exit 2
+fi
+
+cd $git_dir
+
+if [ -z $DOCKER_USERNAME] && [ -z $DOCKER_PASSWORD]
+then
+	$docker_exec login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $PLUGIN_REPO
+	if [[ $? -ne 0 ]];then
+		exit 3
+	fi
+fi
+
+$docker_exec build --rm=true -f $PLUGIN_DOCKERFILE -t 00000000 . --pull=true --label org.label-schema.build-date=$(date "+%Y-%m-%dT%H:%M:%SZ") --label org.label-schema.vcs-ref=00000000 --label org.label-schema.vcs-url=
+if [[ $? -ne 0 ]];then
+    exit 3
+fi
+
+$docker_exec  tag 00000000 $PLUGIN_REPO:$PLUGIN_TAG
+if [[ $? -ne 0 ]];then
+    exit 3
+fi
+
+$docker_exec push $PLUGIN_REPO:$PLUGIN_TAG
+if [[ $? -ne 0 ]];then
+    exit 3
+fi
+
+$docker_exec rmi 00000000
+if [[ $? -ne 0 ]];then
+    exit 3
+fi
+
+$docker_exec system prune -f
