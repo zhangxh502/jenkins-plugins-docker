@@ -5,7 +5,7 @@ dockerd_daemon=`which dockerd`
 if [ -x $dockerd_daemon ]; then
 	touch /etc/docker/daemon.json
 	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > /etc/docker/daemon.json
-	$dockerd_daemon -g /var/lib/docker
+	nohup $dockerd_daemon -g /var/lib/docker >/dev/null 2>&1 &
 else
 	echo "dockerd exec not found, please install!"
 	exit 1
