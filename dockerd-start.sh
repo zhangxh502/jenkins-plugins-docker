@@ -3,6 +3,8 @@ set -e
 
 dockerd_daemon=`which dockerd`
 if [ -x $dockerd_daemon ]; then
+	touch /etc/docker/daemon.json
+	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > /etc/docker/daemon.json
 	$dockerd_daemon -g /var/lib/docker
 else
 	echo "dockerd exec not found, please install!"
@@ -11,8 +13,6 @@ fi
 
 docker_exec=`which docker`
 if [ -x $docker_exec ]; then
-	touch /etc/docker/daemon.json
-	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > /etc/docker/daemon.json
 	$docker_exec version
 else
 	echo "docker exec not found, please install!"
