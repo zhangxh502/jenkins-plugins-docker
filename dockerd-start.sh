@@ -3,6 +3,7 @@ set -e
 
 dockerd_daemon=`which dockerd`
 if [ -x $dockerd_daemon ]; then
+	mkdir -p /etc/docker
 	touch /etc/docker/daemon.json
 	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > /etc/docker/daemon.json
 	nohup $dockerd_daemon -g /var/lib/docker >/dev/null 2>&1 &
