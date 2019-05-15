@@ -11,6 +11,8 @@ fi
 
 docker_exec=`which docker`
 if [ -x $docker_exec ]; then
+	touch /etc/docker/daemon.json
+	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > /etc/docker/daemon.json
 	$docker_exec version
 else
 	echo "docker exec not found, please install!"
