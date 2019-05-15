@@ -6,13 +6,20 @@ if [ -x $dockerd_daemon ]; then
 	mkdir -p /etc/docker
 	touch /etc/docker/daemon.json
 	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > /etc/docker/daemon.json
-	nohup $dockerd_daemon -g /var/lib/docker >/dev/null 2>&1 &
+	nohup $dockerd_daemon -H fd:// --config-file /etc/docker/daemon.json >/dev/null 2>&1 &
 else
 	echo "dockerd exec not found, please install!"
 	exit 1
 fi
 
 docker_exec=`which docker`
+if [ -x $docker_exec ]; then
+	$docker_exec version
+else
+	echo "docker exec not found, please install!"
+	exit 1
+fi
+
 if [ -z $DOCKER_USERNAME] && [ -z $DOCKER_PASSWORD]
 then
 	$docker_exec login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
