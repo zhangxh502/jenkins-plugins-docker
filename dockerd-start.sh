@@ -12,11 +12,6 @@ else
 	exit 1
 fi
 
-while true
-do
-	sleep 5s
-done
-
 docker_exec=`which docker`
 if [ -x $docker_exec ]; then
 	$docker_exec version
@@ -27,12 +22,13 @@ fi
 
 if [ -z $DOCKER_USERNAME] && [ -z $DOCKER_PASSWORD]
 then
-	$docker_exec login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $PLUGIN_REPO
+	$docker_exec login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
 	if [[ $? -ne 0 ]];then
 		exit 3
 	fi
 fi
 
+cd /home/jenkins/workspace/$CICD_EXECUTION_ID
 $docker_exec build --rm=true -f $PLUGIN_DOCKERFILE -t 00000000 . --pull=true --label org.label-schema.build-date=$(date "+%Y-%m-%dT%H:%M:%SZ") --label org.label-schema.vcs-ref=00000000 --label org.label-schema.vcs-url=
 if [[ $? -ne 0 ]];then
     exit 3
