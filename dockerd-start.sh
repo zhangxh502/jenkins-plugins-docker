@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-dockerd_daemon=`while dockerd`
+dockerd_daemon=`which dockerd`
 if [ -x $dockerd_daemon ]; then
 	$dockerd_daemon -g /var/lib/docker
 else
@@ -9,7 +9,7 @@ else
 	exit 1
 fi
 
-docker_exec=`while dockerd`
+docker_exec=`which docker`
 if [ -x $docker_exec ]; then
 	$docker_exec version
 else
