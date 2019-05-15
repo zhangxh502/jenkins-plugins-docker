@@ -17,14 +17,6 @@ else
 	exit 1
 fi
 
-git_dir=$HOME/workspace/pipeline_$CICD_EXECUTION_ID
-if [ ! -d $git_dir ]; then
-	echo $git_dir" not exist, if git clone!"
-	exit 2
-fi
-
-cd $git_dir
-
 if [ -z $DOCKER_USERNAME] && [ -z $DOCKER_PASSWORD]
 then
 	$docker_exec login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $PLUGIN_REPO
