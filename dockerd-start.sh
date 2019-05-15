@@ -12,6 +12,11 @@ else
 	exit 1
 fi
 
+while true
+do
+	sleep 5s
+done
+
 docker_exec=`which docker`
 if [ -x $docker_exec ]; then
 	$docker_exec version
