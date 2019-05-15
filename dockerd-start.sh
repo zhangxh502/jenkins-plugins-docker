@@ -13,13 +13,6 @@ else
 fi
 
 docker_exec=`which docker`
-if [ -x $docker_exec ]; then
-	$docker_exec version
-else
-	echo "docker exec not found, please install!"
-	exit 1
-fi
-
 if [ -z $DOCKER_USERNAME] && [ -z $DOCKER_PASSWORD]
 then
 	$docker_exec login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
