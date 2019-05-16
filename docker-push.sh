@@ -3,7 +3,7 @@ set -e
 
 docker_exec=`which docker`
 if [ -x $docker_exec ]; then
-	$docker_exec version
+	exec $docker_exec version
 else
 	echo "docker exec not found, please install!"
 	exit 1
