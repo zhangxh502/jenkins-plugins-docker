@@ -32,3 +32,10 @@ $docker_exec push $PLUGIN_REPO:$PLUGIN_TAG
 if [[ $? -ne 0 ]];then
     exit 3
 fi
+
+$docker_exec rmi 00000000
+if [[ $? -ne 0 ]];then
+    exit 3
+fi
+
+$docker_exec system prune -f
