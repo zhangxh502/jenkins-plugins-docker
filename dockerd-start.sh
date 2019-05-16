@@ -1,16 +1,22 @@
 #!/bin/sh
 set -e
 
+docker_daemon_file="/etc/docker/daemon.json"
 dockerd_daemon=`which dockerd`
 if [ -x $dockerd_daemon ]; then
 	mkdir -p /etc/docker
-	touch /etc/docker/daemon.json
-	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > /etc/docker/daemon.json
-	nohup $dockerd_daemon -H fd:// --config-file /etc/docker/daemon.json >/dev/null 2>&1 &
+	touch $docker_daemon_file
+	echo "{\"insecure-registries\": [\"$DOCKER_REGISTRY\"]}" > $docker_daemon_file
+	nohup $dockerd_daemon -H fd:// --config-file $docker_daemon_file >/dev/null 2>&1 &
 else
 	echo "dockerd exec not found, please install!"
 	exit 1
 fi
+
+while true
+do
+	sleep 5s
+done
 
 docker_exec=`which docker`
 if [ -x $docker_exec ]; then
