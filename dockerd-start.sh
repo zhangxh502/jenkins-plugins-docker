@@ -29,7 +29,7 @@ else
 	exit 1
 fi
 
-if [ -z $DOCKER_USERNAME ] && [ -z $DOCKER_PASSWORD ]
+if [ -n $DOCKER_USERNAME ] && [ -n $DOCKER_PASSWORD ]
 then
 	$docker_exec login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
 	if [[ $? -ne 0 ]];then
