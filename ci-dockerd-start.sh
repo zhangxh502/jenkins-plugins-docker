@@ -7,7 +7,7 @@ if [ -x $dockerd_daemon ]; then
 	mkdir -p /etc/docker
 	touch $docker_daemon_file
 
-	if [ -n $CI_DOCKER_REGISTRY ]; then
+	if [ -n $CI_DOCKER_REGISTRY ] && [ "$CI_DOCKER_REGISTRY" != "" ]; then
 		echo "{\"insecure-registries\": [\"$CI_DOCKER_REGISTRY\"]}" > $docker_daemon_file
 	fi
 
@@ -33,7 +33,7 @@ else
 	exit 1
 fi
 
-if [ -n $CI_DOCKER_USERNAME ] && [ -n $CI_DOCKER_PASSWORD ] && [ -n $CI_DOCKER_REGISTRY ]
+if [ -n $CI_DOCKER_USERNAME ] && [ "$CI_DOCKER_USERNAME" != "" ] && [ -n $CI_DOCKER_PASSWORD ] && [ "$CI_DOCKER_PASSWORD" != "" ] && [ -n $CI_DOCKER_REGISTRY ] && [ "$CI_DOCKER_REGISTRY" != "" ]
 then
 	$docker_exec login -u $CI_DOCKER_USERNAME -p $CI_DOCKER_PASSWORD $CI_DOCKER_REGISTRY
 	if [[ $? -ne 0 ]];then
