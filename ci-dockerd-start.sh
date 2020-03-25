@@ -5,7 +5,6 @@ docker_daemon_file="/etc/docker/daemon.json"
 dockerd_daemon=`which dockerd`
 if [ -x $dockerd_daemon ]; then
 	mkdir -p /etc/docker
-	touch $docker_daemon_file
 
 	if [ -n $CI_DOCKER_REGISTRY ] && [ "$CI_DOCKER_REGISTRY" != "" ]; then
 		echo "{\"insecure-registries\": [\"$CI_DOCKER_REGISTRY\"]}" > $docker_daemon_file
